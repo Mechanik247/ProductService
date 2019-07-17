@@ -14,9 +14,9 @@ namespace ProductService
         {
             // New code:
             ODataModelBuilder builder = new ODataConventionModelBuilder();
-            builder.EntitySet<Product>("Products");
+            builder.EntitySet<Student>("Student");
             config.MapODataServiceRoute(
-                routeName: "ODataRoute",
+                routeName: "student",
                 routePrefix: null,
                 model: builder.GetEdmModel());
         }

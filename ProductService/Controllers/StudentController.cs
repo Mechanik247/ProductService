@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNet.OData;
-using ProductService.DAL;
 using ProductService.Models;
+using ProductService.DAL;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -13,12 +13,12 @@ using System.Web.Http;
 
 namespace ProductService.Controllers
 {
-    public class ProductsController : ODataController
+    public class StudentController : ODataController
     {
         SchoolContext db = new SchoolContext();
         private bool ProductExists(int key)
         {
-            return db.Products.Any(p => p.Id == key);
+            return db.Students.Any(p => p.Id == key);
         }
         protected override void Dispose(bool disposing)
         {
@@ -27,40 +27,40 @@ namespace ProductService.Controllers
         }
 
         [EnableQuery]
-        public IQueryable<Product> Get()
+        public IQueryable<Student> Get()
         {
-            return db.Products;
+            return db.Students;
         }
         [EnableQuery]
-        public SingleResult<Product> Get([FromODataUri] int key)
+        public SingleResult<Student> Get([FromODataUri] int key)
         {
-            IQueryable<Product> result = db.Products.Where(p => p.Id == key);
+            IQueryable<Student> result = db.Students.Where(p => p.Id == key);
             return SingleResult.Create(result);
         }
 
-        public async Task<IHttpActionResult> Post(Product product)
+        public async Task<IHttpActionResult> Post(Student student)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            db.Products.Add(product);
+            db.Students.Add(student);
             await db.SaveChangesAsync();
-            return Created(product);
+            return Created(student);
         }
 
-        public async Task<IHttpActionResult> Patch([FromODataUri] int key, Delta<Product> product)
+        public async Task<IHttpActionResult> Patch([FromODataUri] int key, Delta<Student> student)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var entity = await db.Products.FindAsync(key);
+            var entity = await db.Students.FindAsync(key);
             if (entity == null)
             {
                 return NotFound();
             }
-            product.Patch(entity);
+            student.Patch(entity);
             try
             {
                 await db.SaveChangesAsync();
@@ -78,7 +78,7 @@ namespace ProductService.Controllers
             }
             return Updated(entity);
         }
-        public async Task<IHttpActionResult> Put([FromODataUri] int key, Product update)
+        public async Task<IHttpActionResult> Put([FromODataUri] int key, Student update)
         {
             if (!ModelState.IsValid)
             {
@@ -109,12 +109,12 @@ namespace ProductService.Controllers
 
         public async Task<IHttpActionResult> Delete([FromODataUri] int key)
         {
-            var product = await db.Products.FindAsync(key);
-            if (product == null)
+            var student = await db.Students.FindAsync(key);
+            if (student == null)
             {
                 return NotFound();
             }
-            db.Products.Remove(product);
+            db.Students.Remove(student);
             await db.SaveChangesAsync();
             return StatusCode(HttpStatusCode.NoContent);
         }
